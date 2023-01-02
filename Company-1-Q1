@@ -1,4 +1,4 @@
-*Evaluate Reverse Polish Notation*
+*EVALUATE REVERSE POLISH NOTATION*
 
 You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation.
 
@@ -13,3 +13,46 @@ There will not be any division by zero.
 The input represents a valid arithmetic expression in a reverse polish notation.
 The answer and all the intermediate calculations can be represented in a 32-bit integer.
 
+Code:
+
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<string>s; string n1,n2;
+        for(int i=0;i<tokens.size();i++){
+            if(tokens[i]=="+"){
+                n1=s.top();
+                s.pop();
+                n2=s.top();
+                s.pop();
+                s.push(to_string(stoi(n1)+stoi(n2)));
+            }
+           
+           else if(tokens[i]=="-"){
+                n1=s.top();
+                s.pop();
+                n2=s.top();
+                s.pop();
+                s.push(to_string(stoi(n2)-stoi(n1)));
+            }
+           else if(tokens[i]=="*"){
+               n1=s.top();
+                s.pop();
+                n2=s.top();
+                s.pop();
+                s.push(to_string(stoi(n1)*stoi(n2))); 
+            }
+           else if(tokens[i]=="/"){
+               n1=s.top();
+                s.pop();
+                n2=s.top();
+                s.pop();
+                s.push(to_string(stoi(n2)/stoi(n1))); 
+            }
+            else s.push(tokens[i]);
+        }
+        return stoi(s.top());
+    }
+};
+
+*Find my code* [here](https://leetcode.com/problems/evaluate-reverse-polish-notation/submissions/)
