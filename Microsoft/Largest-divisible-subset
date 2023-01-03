@@ -1,0 +1,51 @@
+Leetcode 368. Largest Divisible Subset
+Given a set of distinct positive integers nums, return the largest subset answer such that every pair (answer[i], answer[j]) of elements in this subset satisfies:
+
+answer[i] % answer[j] == 0, or
+answer[j] % answer[i] == 0
+If there are multiple solutions, return any of them.
+
+Code:
+
+class Solution {
+public:
+    int solve(int inx,int prev_inx,vector<int>& nums,int n,vector<vector<int>>&dp){
+        if(inx==n)return 0;
+        if(dp[inx][prev_inx+1]!=-1)return dp[inx][prev_inx+1];
+        int len=solve(inx+1,prev_inx,nums,n,dp);
+        if(prev_inx==-1 || nums[inx]%nums[prev_inx]==0)
+            len=max(len,1+solve(inx+1,inx,nums,n,dp));
+        return dp[inx][prev_inx+1]=len;
+    }
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+         vector<int>ans;int n=nums.size();
+        sort(nums.begin(),nums.end());
+        vector<int>dp(n,1);
+        vector<int>parent(n);
+         int  mx=0;
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+            for(int j=0;j<i;j++){
+                if(nums[i]%nums[j]==0 && 1+dp[j]>dp[i])
+                    {
+                    parent[i]=j;
+                    dp[i]=1+dp[j];
+                    }
+            }
+            
+            
+        }
+     for(int i=0;i<n;i++)
+        if(dp[i]>dp[mx]){
+               mx=i;
+           }
+        
+        ans.push_back(nums[mx]);
+        
+        while(parent[mx]!=mx){
+            ans.push_back(nums[parent[mx]]);
+            mx=parent[mx];
+        }
+           return ans;
+    }
+};
