@@ -24,3 +24,26 @@ public:
         return c;
     }
 };
+
+OR
+
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        unordered_map<char,int>mp;
+        int c=0;
+        int i=0;int j=0;
+        while(j<s.size()){
+            mp[s[j]]++;
+            while(mp.size()==3){
+                c+=1+(s.size()-1-j);
+                
+                mp[s[i]]--;
+                if(mp[s[i]]==0)mp.erase(s[i]);
+                i++;
+            }
+            j++;
+        }
+        return c;
+    }
+};
