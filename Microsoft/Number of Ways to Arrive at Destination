@@ -9,31 +9,32 @@ Code:
 class Solution {
 public:
     int countPaths(int n, vector<vector<int>>& roads) {
-        unordered_map<int,vector<pair<long,long>>>mp;
+        unordered_map<long long,vector<pair<long long ,long long>>>mp;
         for(auto e:roads){
             mp[e[0]].push_back({e[1],e[2]});
             mp[e[1]].push_back({e[0],e[2]});
         }
-        vector<long long>dist(n,INT_MAX);
-        int mod=(10^9 + 7);
+        vector<long long>dist(n,LONG_MAX);
+        long long mod=(1e9 + 7);
         dist[0]=0;
         priority_queue<pair<long,long>,vector<pair<long,long>>,greater<pair<long,long>>>pq;
-        vector<int>ways(n,0);
+        vector<long>ways(n,0);
         ways[0]=1;
         pq.push({0,0});
         while(!pq.empty()){
             auto top=pq.top();
             pq.pop();
             long long dis=top.first;
-            int node=top.second;
+            long long node=top.second;
+            if(dist[node] < dis) continue;
             for(auto e:mp[node]){
                 if(dis+e.second<dist[e.first])
                     {dist[e.first]=dis+e.second;
-                     ways[e.first]=ways[node];
+                     ways[e.first]=ways[node]%mod;
                     pq.push({dist[e.first],e.first});
                     }
                 else if(dis+e.second==dist[e.first]){
-                    ways[e.first]=(ways[e.first]+ways[node]);
+                    ways[e.first]=(ways[e.first]+ways[node])%mod;
                 }
             }
         }
