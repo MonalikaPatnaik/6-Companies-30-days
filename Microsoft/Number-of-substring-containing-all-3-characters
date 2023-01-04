@@ -1,0 +1,26 @@
+Leetcode 1358. Number of Substrings Containing All Three Characters
+Given a string s consisting only of characters a, b and c.
+
+Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+
+Code:
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        unordered_map<char,int>mp;
+        int c=0;
+        int i=0;int j=0;
+        while(j<s.size()){
+            mp[s[j]]++;
+            while(mp['a']&& mp['b']&& mp['c']){
+                c+=1+(s.size()-1-j);
+                
+                mp[s[i]]--;
+                // if(mp[s[i]]==0)mp.erase(s[i]);
+                i++;
+            }
+            j++;
+        }
+        return c;
+    }
+};
