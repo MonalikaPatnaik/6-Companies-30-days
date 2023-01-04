@@ -1,0 +1,50 @@
+Leetcode 2426. Number of Pairs Satisfying Inequality
+
+You are given two 0-indexed integer arrays nums1 and nums2, each of size n, and an integer diff. Find the number of pairs (i, j) such that:
+
+0 <= i < j <= n - 1 and
+nums1[i] - nums1[j] <= nums2[i] - nums2[j] + diff.
+Return the number of pairs that satisfy the conditions.
+
+Code:
+
+class Solution {
+public:
+    long long count=0;
+    void checkcount(vector<int>&nums,int s,int e,int mid,int diff,int n){
+        int l=s;int r=mid+1;
+        while(l<=mid && r<=e){
+            if(nums[l]-nums[r]<=diff){
+                count+=e-r+1;
+                l++;
+            }
+            else r++;
+        }
+        int *first=new int[e+1];
+        for(int i=s;i<=e;i++){
+            first[i]=nums[i];
+        }
+        sort(first,first+e+1);
+        for(int i=s;i<=e;i++){
+            nums[i]=first[i];
+        }
+        delete[]first;
+        return;
+    }
+    void mergesort(vector<int>&nums,int s,int e,int diff){
+        if(s==e)return;
+        int mid=s+(e-s)/2;
+        mergesort(nums,s,mid,diff);
+        mergesort(nums,mid+1,e,diff);
+        checkcount(nums,s,e,mid,diff,nums.size());
+    }
+    long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int diff) {
+        int n=nums1.size();
+        vector<int>nums(n);
+        for(int i=0;i<n;i++){
+            nums[i]=nums1[i]-nums2[i];
+        }
+        mergesort(nums,0,n-1,diff);
+        return count;
+    }
+};
