@@ -1,0 +1,42 @@
+1976. Number of Ways to Arrive at Destination
+You are in a city that consists of n intersections numbered from 0 to n - 1 with bi-directional roads between some intersections. The inputs are generated such that you can reach any intersection from any other intersection and that there is at most one road between any two intersections.
+
+You are given an integer n and a 2D integer array roads where roads[i] = [ui, vi, timei] means that there is a road between intersections ui and vi that takes timei minutes to travel. You want to know in how many ways you can travel from intersection 0 to intersection n - 1 in the shortest amount of time.
+
+Return the number of ways you can arrive at your destination in the shortest amount of time. Since the answer may be large, return it modulo 109 + 7.
+
+Code:
+class Solution {
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        unordered_map<int,vector<pair<long,long>>>mp;
+        for(auto e:roads){
+            mp[e[0]].push_back({e[1],e[2]});
+            mp[e[1]].push_back({e[0],e[2]});
+        }
+        vector<long long>dist(n,INT_MAX);
+        int mod=(10^9 + 7);
+        dist[0]=0;
+        priority_queue<pair<long,long>,vector<pair<long,long>>,greater<pair<long,long>>>pq;
+        vector<int>ways(n,0);
+        ways[0]=1;
+        pq.push({0,0});
+        while(!pq.empty()){
+            auto top=pq.top();
+            pq.pop();
+            long long dis=top.first;
+            int node=top.second;
+            for(auto e:mp[node]){
+                if(dis+e.second<dist[e.first])
+                    {dist[e.first]=dis+e.second;
+                     ways[e.first]=ways[node];
+                    pq.push({dist[e.first],e.first});
+                    }
+                else if(dis+e.second==dist[e.first]){
+                    ways[e.first]=(ways[e.first]+ways[node]);
+                }
+            }
+        }
+        return ways[n-1]%mod;
+    }
+};
