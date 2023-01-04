@@ -1,0 +1,46 @@
+Leetcode 2344. Minimum Deletions to Make Array Divisible
+
+You are given two positive integer arrays nums and numsDivide. You can delete any number of elements from nums.
+
+Return the minimum number of deletions such that the smallest element in nums divides all the elements of numsDivide. If this is not possible, return -1.
+
+Note that an integer x divides y if y % x == 0.
+
+Code:
+
+class Solution {
+public:
+    int solve(vector<int>& a, vector<int>& b, int &count,int &jcount,int n,int i){
+        if(i==n-1)return -1;
+        for(int j=0;j<b.size();j++){
+            if(b[j]%a[i]!=0){
+                count++;
+                break;
+            }
+            else jcount++;
+        }
+        if(jcount==b.size())return count;
+        jcount=0;
+      return  solve(a,b,count,jcount,n,i+1);
+    }
+    int gcd( vector<int>& b){
+        int res=b[0];
+        for(int i=1;i<b.size();i++){
+            res= __gcd(b[i],res);
+        }
+        return res;
+    }
+    int minOperations(vector<int>& a, vector<int>& b) {
+        int count=0;int n=a.size();
+        sort(a.begin(),a.end());
+        
+       int x= gcd(b);
+       for(int i=0;i<n;i++){
+           if(x%a[i]!=0)count++;
+           else break;
+       }
+        if(count==n)return -1;
+        return count;
+        
+    }
+};
