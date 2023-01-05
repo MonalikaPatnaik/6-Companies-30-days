@@ -1,0 +1,53 @@
+Leetcode 1392. Longest Happy Prefix
+
+A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
+
+Given a string s, return the longest happy prefix of s. Return an empty string "" if no such prefix exists.
+
+Code:
+
+class Solution {
+public:
+    // int solve(int i,int j,string &s,int &len,string &str,int n,vector<vector<int>>&dp){
+    //     if(i==n-1||j==1){
+    //         if(s.substr(0,i+1)==s.substr(j) && i+1>len)
+    //            str=s.substr(j);
+    //         return len=i+1;
+    //     }
+    //     if(dp[i][j]!=-1)return dp[i][j];
+    //     if(s.substr(0,i+1)==s.substr(j) && i+1>len)
+    //         {
+    //         len=i+1;
+    //         dp[i][j]=len;
+    //         str=s.substr(j);
+    //     }
+    //    return dp[i][j]=solve(i+1,j-1,s,len,str,n,dp);
+    // }
+    string longestPrefix(string s) {
+           
+        vector<int>lcp(s.size());
+        lcp[0]=0;
+        int i=0;int j=1;int mx=0;
+        while(j<s.size()){
+            if(s[i]==s[j]){
+                lcp[j]=i+1;
+                i++;
+            }
+            else{
+                if(i>0)
+                   { i=lcp[i-1];
+                j--;}
+            }
+            // if(lcp[j]>lcp[mx])mx=j;
+            j++;
+        }
+       
+        // while(lcp[mx]){
+        //      str.push_back(s[mx]);
+        //     mx--;
+        // }
+        // reverse(str.begin(),str.end());
+        return(s.substr(0,lcp[s.size()-1]));
+      
+    }
+};
